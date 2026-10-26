@@ -1,0 +1,61 @@
+<div class="app-container">
+  
+  <!-- Step 1: Intro Card -->
+  <div *ngIf="step() === 1" id="intro-card" class="card">
+    <img [src]="introGif()" alt="GIF" class="intro-gif">
+    <h1 class="title">သီတင်းကျွတ် မုန့်ဖိုး Surprise! 🌸</h1>
+    <p class="subtitle">အချစ်အတွက် Surprise လေးရှိတယ် ကြည့်ချင်လား? 💖</p>
+    
+    <div class="button-group">
+      <button (click)="goToWheel()" class="btn-yes">Yes! 🎈</button>
+      <button (click)="handleNoClick()" class="btn-no-static">No 😜</button>
+    </div>
+    
+    <div *ngIf="showErrorBox()" class="error-box">
+      <p>⚠️ Error: No ကိုနှိပ်လို့မရပါဘူး! ကြည့်ကိုကြည့်ရမယ် 😜</p>
+    </div>
+  </div>
+
+  <!-- Step 2: Spin Wheel Section -->
+  <div *ngIf="step() === 2" id="wheel-card" class="wheel-container">
+    <h2 class="wheel-title">သီတင်းကျွတ် မုန့်ဖိုး Spinner 🎡</h2>
+    <p class="wheel-subtitle">
+      ကျန်ရှိသော အလှည့်အရေအတွက်: <span class="spins-count">{{ spinsLeft() }}</span> / 3ခါ
+    </p>
+
+    <div class="canvas-wrapper">
+      <div class="wheel-pointer">🎀</div>
+      <canvas #wheelCanvas width="320" height="320" class="wheel-canvas"></canvas>
+    </div>
+
+    <button 
+      (click)="spinWheel()" 
+      [disabled]="isSpinning() || spinsLeft() <= 0" 
+      class="btn-spin">
+      {{ isSpinning() ? 'လှည့်နေသည်...' : (spinsLeft() > 0 ? 'လှည့်မည်! ✨' : 'အကြိမ်ရေ ကုန်ဆုံးပါပြီ') }}
+    </button>
+  </div>
+
+  <!-- Prize Dialog -->
+  <p-dialog 
+    header="🎉 ဂုဏ်ယူပါတယ်!" 
+    [(visible)]="displayPrizeDialog" 
+    [modal]="true" 
+    [responsive]="true" 
+    [style]="{ width: '85vw', 'max-width': '380px' }"
+    [draggable]="false"
+    [resizable]="false">
+    
+    <div class="dialog-content">
+      <p class="prize-announce-text">အချစ်ရရှိတဲ့ ဆုမဲလေးကတော့</p>
+      <div class="prize-badge">{{ wonPrizeText() }}</div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button label="OK 💖" (onClick)="closeDialog()" styleClass="p-button-rounded p-button-pink"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Kiss Effect Floating Container -->
+  <div #kissContainer class="kiss-container"></div>
+</div>

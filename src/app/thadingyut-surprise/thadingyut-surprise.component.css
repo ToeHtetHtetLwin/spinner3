@@ -1,0 +1,193 @@
+/* Original Pink Background Container */
+.app-container {
+  min-height: 100vh;
+  background-color: #fbcfe8; /* Original Background Color retained */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Card Styling */
+.card {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 90vw;
+  max-width: 350px;
+}
+
+.intro-gif {
+  width: 10rem;
+  height: 10rem;
+  margin: 0 auto 1rem auto;
+  border-radius: 1.25rem;
+  object-fit: cover;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #db2777;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #4b5563;
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-yes {
+  background-color: #ec4899;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.6rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 15px rgba(236, 72, 153, 0.3);
+}
+
+.btn-no-static {
+  background-color: #d1d5db;
+  color: #374151;
+  font-weight: 700;
+  padding: 0.6rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+}
+
+.error-box {
+  margin-top: 1rem;
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  padding: 0.6rem;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  animation: bounce 1s infinite;
+}
+
+/* Bright & Cute Wheel */
+.wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.wheel-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #db2777;
+}
+
+.wheel-subtitle {
+  font-size: 0.85rem;
+  color: #ec4899;
+  margin-bottom: 1rem;
+}
+
+.spins-count {
+  font-weight: 800;
+  color: #be185d;
+  font-size: 1.1rem;
+}
+
+.canvas-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -12px;
+  z-index: 10;
+  font-size: 2rem;
+  filter: drop-shadow(0px 3px 2px rgba(0,0,0,0.2));
+}
+
+.wheel-canvas {
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+  border: 6px solid #ffffff;
+  max-width: 85vw;
+  max-height: 85vw;
+}
+
+.btn-spin {
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.75rem 2.5rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(236, 72, 153, 0.4);
+}
+
+.btn-spin:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* PrimeNG Custom Dialog Styling */
+.dialog-content {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.prize-announce-text {
+  font-size: 0.9rem;
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+.prize-badge {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #be185d;
+  background-color: #fef3c7;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  display: inline-block;
+  border: 2px dashed #f59e0b;
+}
+
+/* Floating Kiss Animations */
+.kiss-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.floating-emoji {
+  position: absolute;
+  font-size: 2.2rem;
+  user-select: none;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(-10%); }
+  50% { transform: translateY(0); }
+}
