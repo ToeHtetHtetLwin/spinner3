@@ -20,7 +20,7 @@
   <div *ngIf="step() === 2" id="wheel-card" class="wheel-container">
     <h2 class="wheel-title">သီတင်းကျွတ် မုန့်ဖိုး Spinner 🎡</h2>
     <p class="wheel-subtitle">
-      ကျန်ရှိသော အလှည့်အရေအတွက်: <span class="spins-count">{{ spinsLeft() }}</span> / 4ခါ
+      ကျန်ရှိသော အလှည့်အရေအတွက်: <span class="spins-count">{{ spinsLeft() }}</span> / 5ခါ
     </p>
 
     <div class="canvas-wrapper">
@@ -46,9 +46,17 @@
     [draggable]="false"
     [resizable]="false">
     
-    <div class="dialog-content">
-      <p class="prize-announce-text">အချစ်ရရှိတဲ့ ဆုမဲလေးကတော့</p>
-      <div class="prize-badge">{{ wonPrizeText() }}</div>
+    <div class="dialog-content" style="text-align: center; padding: 15px 0;">
+      <p class="prize-announce-text" style="font-size: 16px; margin-bottom: 10px;">အချစ်ရရှိတဲ့ ဆုမဲလေးကတော့</p>
+      
+      <!-- Emoji အကြီးကြီး ပြသမည့်နေရာ -->
+      <div class="prize-emoji" style="font-size: 80px; margin: 10px 0; animation: bounce 0.6s infinite alternate;">
+        {{ wonPrizeEmoji() }}
+      </div>
+
+      <div class="prize-badge" style="font-size: 22px; font-weight: bold; color: #E63946;">
+        {{ wonPrizeText() }}
+      </div>
     </div>
 
     <ng-template pTemplate="footer">

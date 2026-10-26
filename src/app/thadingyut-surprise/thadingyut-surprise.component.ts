@@ -8,6 +8,7 @@ import confetti from 'canvas-confetti';
 interface Prize {
   text: string;
   color: string;
+  emoji: string;
 }
 
 @Component({
@@ -22,36 +23,29 @@ export class ThadingyutSurpriseComponent implements AfterViewInit {
   @ViewChild('kissContainer') kissContainer!: ElementRef<HTMLDivElement>;
 
   step = signal<number>(1);
-  spinsLeft = signal<number>(4);
+  spinsLeft = signal<number>(5);
   isSpinning = signal<boolean>(false);
   showErrorBox = signal<boolean>(false);
 
   displayPrizeDialog = signal<boolean>(false);
   wonPrizeText = signal<string>('');
+  wonPrizeEmoji = signal<string>('');
 
-  introGif = signal<string>(
-    'intro.webp'
-  );
+  introGif = signal<string>('intro.webp');
   sadGif = 'sad.gif';
 
-  // Wheel background segments display
-  wheelDisplayPrizes: Prize[] = [
-    { text: '🥰 1', color: '#E63946' },
-    { text: '😘 2', color: '#2A9D8F' },
-    { text: '😍 3', color: '#E9C46A' },
-    { text: '🥳 4', color: '#264653' }
-   
+  // Wheel ပေါ်တွင် ပြသမည့် ဆုမဲ ၅ မျိုး
+  prizes: Prize[] = [
+    { text: 'မုန့်', color: '#E63946', emoji: '🍩' },
+    { text: 'နှုတ်ခမ်းနီ', color: '#2A9D8F', emoji: '💄' },
+    { text: 'အာဘွား', color: '#E9C46A', emoji: '💋' },
+    { text: 'ဗလာ', color: '#264653', emoji: '😢' },
+    { text: 'မုန့်ဖိုး 5 သောင်း', color: '#F4A261', emoji: '💵' }
   ];
 
-  // Actual Prizes to be won sequentially
-  actualPrizes: string[] = [
-    'မုန့်ဖိုး 5 သောင်း ',
-    'နှုတ်ခမ်းနီ',
-    'မုန့်',
-
-    'အာဘွား',
-
-  ];
+  // မဲပေါက်မည့် အစဉ်လိုက် (၅ သောင်းဆုကို နောက်ဆုံးမှ ပေါက်ပါမည်)
+  // ၁. ဗလာ -> ၂. မုန့် -> ၃. နှုတ်ခမ်းနီ -> ၄. အာဘွား -> ၅. မုန့်ဖိုး 5 သောင်း
+  actualSequenceIndexes: number[] = [3, 0, 1, 2, 4];
 
   private currentRotation = 0;
   private currentSpinCount = 0;
@@ -83,12 +77,12 @@ export class ThadingyutSurpriseComponent implements AfterViewInit {
     const ctx = this.wheelCanvas.nativeElement.getContext('2d');
     if (!ctx) return;
 
-    const numPrizes = this.wheelDisplayPrizes.length;
+    const numPrizes = this.prizes.length;
     const arc = (2 * Math.PI) / numPrizes;
 
     ctx.clearRect(0, 0, 320, 320);
 
-    this.wheelDisplayPrizes.forEach((prize, index) => {
+    this.prizes.forEach((prize, index) => {
       const angle = index * arc;
 
       // Draw Pie Slice
@@ -104,16 +98,17 @@ export class ThadingyutSurpriseComponent implements AfterViewInit {
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Draw Text
+      // Draw Text & Emoji
       ctx.save();
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 18px sans-serif';
+      ctx.font = 'bold 13px sans-serif';
       ctx.translate(
         160 + Math.cos(angle + arc / 2) * 105,
         160 + Math.sin(angle + arc / 2) * 105
       );
       ctx.rotate(angle + arc / 2 + Math.PI / 2);
-      ctx.fillText(prize.text, -ctx.measureText(prize.text).width / 2, 0);
+      const label = `${prize.emoji} ${prize.text}`;
+      ctx.fillText(label, -ctx.measureText(label).width / 2, 0);
       ctx.restore();
     });
   }
@@ -124,16 +119,16 @@ export class ThadingyutSurpriseComponent implements AfterViewInit {
     this.isSpinning.set(true);
     this.spinsLeft.update((val) => val - 1);
 
-    // Get current prize in sequence
-    const selectedIndex = this.currentSpinCount % this.actualPrizes.length;
-    const wonText = this.actualPrizes[selectedIndex];
+    // ရွေးချယ်မည့် Target Index ကို အစဉ်လိုက် ထုတ်ယူခြင်း
+    const targetPrizeIndex = this.actualSequenceIndexes[this.currentSpinCount % this.actualSequenceIndexes.length];
+    const targetPrize = this.prizes[targetPrizeIndex];
     this.currentSpinCount++;
 
-    const numPrizes = this.wheelDisplayPrizes.length;
+    const numPrizes = this.prizes.length;
     const sliceAngle = 360 / numPrizes;
 
-    // Calculate rotation to stop exactly at target slice pointer (270deg top pointer)
-    const targetSliceCenter = (selectedIndex * sliceAngle) + (sliceAngle / 2);
+    // အပေါ်ဘက် Pointer (270 degree) နေရာသို့ ရောက်အောင် ပတ်လည်အရှီး တွက်ချက်ခြင်း
+    const targetSliceCenter = (targetPrizeIndex * sliceAngle) + (sliceAngle / 2);
     const stopAngle = 270 - targetSliceCenter;
 
     const extraRounds = 360 * 5;
@@ -149,16 +144,17 @@ export class ThadingyutSurpriseComponent implements AfterViewInit {
       ease: 'power4.out',
       onComplete: () => {
         this.isSpinning.set(false);
-        this.wonPrizeText.set(wonText);
+        this.wonPrizeText.set(targetPrize.text);
+        this.wonPrizeEmoji.set(targetPrize.emoji);
 
-        // Show PrimeNG Dialog Box
+        // Show Dialog
         this.displayPrizeDialog.set(true);
 
-        // Fire Confetti Cannon
+        // Confetti effect
         this.triggerConfetti();
 
-        // Trigger kiss animation if prize includes 'အာဘွား'
-        if (wonText.includes('အာဘွား')) {
+        // Trigger Kiss Effect if 'အာဘွား'
+        if (targetPrize.text.includes('အာဘွား')) {
           this.triggerKissEffect();
         }
       }
